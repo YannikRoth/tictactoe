@@ -1,9 +1,12 @@
 package client;
 
+import java.util.logging.Logger;
+
 public class TicTacToeController {
 	
 	private TicTacToeModel model;
 	private TicTacToeView view;
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	public TicTacToeController(TicTacToeModel m, TicTacToeView v) {
 		this.model = m;
@@ -11,15 +14,17 @@ public class TicTacToeController {
 		
 		v.getPlayerButtons().forEach(b -> {
 			b.setOnAction(e ->{
-				/* TODO: 
-				 * X represents the players selection
-				 * this should however be changed dynamically
-				 */
-				b.takeMe(v.getPlayerCode());
+				if(model.isGameStarted()) {
+					logger.fine("Game started");
+					b.takeMe(v.getPlayerCode());
+					model.send(b.getButtonID());
+				}
 			});
 		});
 		
 		v.startGame.setOnAction(e ->{
+			model.startGame();
+			model.setPlayerChar(v.getPlayerCode());
 			v.charTypeInput.setDisable(true);
 		});
 	}
