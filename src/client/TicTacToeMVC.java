@@ -1,10 +1,20 @@
 package client;
 
-public class TicTacToeMVC {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class TicTacToeMVC extends Application{
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		launch(args);
 
+	}
+	
+	public void start(Stage primaryStage) {
+		//setting up GUI
+		TicTacToeModel model = new TicTacToeModel();
+		TicTacToeView view = new TicTacToeView(primaryStage, model);
+		TicTacToeController controller = new TicTacToeController(model, view);
 	}
 
 }
