@@ -18,6 +18,7 @@ public class TicTacToeController {
 					logger.fine("Game started");
 					b.takeMe(v.getPlayerCode());
 					model.send(b.getButtonID());
+					model.setCurrentSum(b.getSummaricValue());
 				}
 			});
 		});
