@@ -14,6 +14,11 @@ public class TTTMsg implements Serializable{
 		this.player = p;
 	}
 	
+	public TTTMsg(TTTButton b) {
+		this.buttonID = b.getButtonID();
+		this.button = b;
+	}
+	
 	public int getButtonID() {
 		return buttonID;
 	}

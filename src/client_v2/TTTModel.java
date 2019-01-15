@@ -49,8 +49,9 @@ public class TTTModel {
 		this.playedCode = s;
 	}
 	
-	public void action(TTTButton button) {				
-		TTTMsg msg = new TTTMsg(button, player);
+	public void action(TTTButton button) {
+		button.setButtonValue(this.playedCode);
+		TTTMsg msg = new TTTMsg(button);
 		button.setText(this.playedCode);
 		button.setDisable(true);
 		System.out.println(button.getButtonID());
@@ -68,7 +69,10 @@ public class TTTModel {
 			System.out.println("hi");
 			objInputStream = new ObjectInputStream(socket.getInputStream());
 			System.out.println("hi");
-			player = new TTTPlayer(socket, objInputStream, objOutputStream);
+			
+			//run new thread to listen for player changes
+			TTTClientThread t = new TTTClientThread(socket, this, objOutputStream, objInputStream);
+			t.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,9 +80,13 @@ public class TTTModel {
 	}
 	
 	private void sendButtonToServer(TTTMsg msg) {
-		
-	}
-	
+		try {
+			objOutputStream.writeObject(msg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
 	
 
 }

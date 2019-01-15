@@ -16,6 +16,7 @@ public class TTTControl {
 			b.setOnAction(e ->{
 				if(model.isGameStarted()) {
 					model.action(b);
+					b.setButtonValue(v.getPlayerCode());;
 				}
 			});
 		});

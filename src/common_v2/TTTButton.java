@@ -1,8 +1,10 @@
 package common_v2;
 
+import java.io.Serializable;
+
 import javafx.scene.control.Button;
 
-public class TTTButton extends Button{
+public class TTTButton extends Button implements Serializable{
 	
 	private String value;
 	private int buttonID = 0;
@@ -33,5 +35,13 @@ public class TTTButton extends Button{
 	}
 	public int getSummaricValue() {
 		return this.buttonSummaricValue;
+	}
+	
+	public String getButtonValue() {
+		return this.value;
+	}
+	
+	public void setButtonValue(String v) {
+		this.value = v;
 	}
 }

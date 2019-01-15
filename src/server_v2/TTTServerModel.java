@@ -17,11 +17,12 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class TTTServerModel extends Thread{
 	
-	SimpleStringProperty outputField = new SimpleStringProperty();
-	ArrayList<TTTPlayer> players = new ArrayList<TTTPlayer>();
-	ArrayList<Socket> sockets = new ArrayList<Socket>();
-	HashMap<TTTPlayer, Socket> matchedPlayers = new HashMap<TTTPlayer, Socket>();
-	ArrayList<TTTClientHandlingThread> client_threads = new ArrayList<TTTClientHandlingThread>();
+	static SimpleStringProperty outputField = new SimpleStringProperty();
+	
+	private volatile ArrayList<Socket> sockets = new ArrayList<Socket>();
+	private volatile ArrayList<TTTClientHandlingThread> client_threads = new ArrayList<TTTClientHandlingThread>();
+	private Map<TTTPlayer, Socket> matchedPlayers = new HashMap<TTTPlayer, Socket>();
+	protected volatile Map<TTTClientHandlingThread, Socket> threadToSocket = new HashMap<TTTClientHandlingThread, Socket>();
 	
 	public TTTServerModel() {
 		
@@ -40,10 +41,10 @@ public class TTTServerModel extends Thread{
 				System.out.println("Entering loop");
 				Socket s = ss.accept();
 				writeToOutput(s.toString());
-				TTTPlayer p = new TTTPlayer(s);
-				matchedPlayers.put(p, s);
-				TTTClientHandlingThread t = new TTTClientHandlingThread(s, p);
+				TTTClientHandlingThread t = new TTTClientHandlingThread(s, this);
+				sockets.add(s);
 				client_threads.add(t);
+				threadToSocket.put(t, s);
 				t.start();
 				writeToOutput("Thread started.");
 			}
@@ -56,7 +57,7 @@ public class TTTServerModel extends Thread{
 
 	}
 	
-	private void writeToOutput(String s) {
+	public static void writeToOutput(String s) {
 		String current = outputField.getValue();
 		if(current == null) {
 			current = "";

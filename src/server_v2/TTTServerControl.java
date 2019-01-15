@@ -3,7 +3,7 @@ package server_v2;
 public class TTTServerControl {
 
 	private TTTServerModel model;
-	private TTTServerView view;
+	protected TTTServerView view;
 	
 	TTTServerControl(TTTServerModel m, TTTServerView v){
 		this.model = m;
